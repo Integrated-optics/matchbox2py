@@ -19,4 +19,4 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://integratedoptics.com/"
-Repository = "https://github.com/yourusername/matchbox2py"
+Repository = "https://github.com/Integrated-optics/matchbox2py"
