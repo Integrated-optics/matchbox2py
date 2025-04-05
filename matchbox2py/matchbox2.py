@@ -107,6 +107,12 @@ class MatchBox2Laser:
         CommandParser.parse_error_message(response)
         CommandParser.parse_response_successful(response)
 
+    def set_fan_temperature(self,temperature: float):
+        self._send_message(LaserCommands.set_fan_temperature(temperature))
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        CommandParser.parse_response_successful(response)
+
     def set_function_save(self):
         self._send_message(LaserCommands.function_save())
         response = self._get_message()
