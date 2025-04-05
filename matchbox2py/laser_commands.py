@@ -33,10 +33,6 @@ class LaserCommands:
         return "e 1"
 
     @staticmethod
-    def set_laser_warm_up():
-        return "e 2"
-
-    @staticmethod
     def set_enable_auto_on():
         return "c a 1"
 

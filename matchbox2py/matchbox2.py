@@ -90,7 +90,7 @@ class MatchBox2Laser:
 
     def set_laser_warm_up(self):
         if self.get_laser_readings().power_state == "OFF":
-            self._send_message(LaserCommands.set_laser_warm_up())
+            self._send_message(LaserCommands.set_laser_warm_up_mode())
             response = self._get_message()
             CommandParser.parse_error_message(response)
             CommandParser.parse_response_successful(response)
@@ -115,6 +115,18 @@ class MatchBox2Laser:
 
     def set_fan_temperature(self,temperature: float):
         self._send_message(LaserCommands.set_fan_temperature(temperature))
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        CommandParser.parse_response_successful(response)
+
+    def set_optical_power(self,power: float):
+        self._send_message(LaserCommands.set_optical_power(power))
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        CommandParser.parse_response_successful(response)
+
+    def set_current(self, current: float):
+        self._send_message(LaserCommands.set_current(current))
         response = self._get_message()
         CommandParser.parse_error_message(response)
         CommandParser.parse_response_successful(response)
