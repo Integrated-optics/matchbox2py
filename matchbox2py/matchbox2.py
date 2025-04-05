@@ -57,6 +57,12 @@ class MatchBox2Laser:
         CommandParser.parse_error_message(response)
         CommandParser.parse_response_successful(response)
 
+    def get_access_level(self):
+        self._send_message(LaserCommands.get_access_level())
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        return CommandParser.parse_laser_access_level(response)
+
     def get_laser_info(self):
         self._send_message(LaserCommands.receive_info())
         response = self._get_message(5)
