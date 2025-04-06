@@ -105,6 +105,10 @@ class LaserCommands:
         return "c 4 "+str(optical_power)
 
     @staticmethod
+    def get_set_optical_power():
+        return "c 4 ?"
+
+    @staticmethod
     def set_current(current):
         return "c 3 "+str(current)
 
