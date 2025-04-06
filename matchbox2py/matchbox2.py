@@ -34,7 +34,8 @@ class MatchBox2Laser:
             raise ConnectionError("Serial connection is not open.")
         self.ser.write(message.encode())
 
-    def _get_message(self, expected_lines=1, delimiter="\n"):
+    def _get_message(self, expected_lines=1):
+        DELIMITER = "\n"
         if self.ser is None or not self.ser.is_open:
             raise ConnectionError("Serial connection is not open.")
         response = []
@@ -42,14 +43,12 @@ class MatchBox2Laser:
             line = self.ser.readline().decode("utf-8", errors="ignore").strip()
             if line:
                 response.append(line)
-        return delimiter.join(response)
+        return DELIMITER.join(response)
+
 
     def disconnect(self):
         if self.ser and self.ser.is_open:
             self.ser.close()
-            print("Disconnected from laser.")
-        else:
-            print("No connection to disconnect.")
 
     def set_access_level(self,level: int,code:int):
         self._send_message(LaserCommands.set_access_level(level,code))
@@ -119,11 +118,34 @@ class MatchBox2Laser:
         CommandParser.parse_error_message(response)
         CommandParser.parse_response_successful(response)
 
+    def get_fan_temperature(self):
+        self._send_message(LaserCommands.receive_settings())
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        return CommandParser.parse_laser_settings(response).fan_temperature
+
+    def set_pin_mode(self,mode_no:int):
+        self._send_message(LaserCommands.set_programmable_pin_level(mode_no))
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        CommandParser.parse_response_successful(response)
+
+    def get_pin_mode(self):
+        self._send_message(LaserCommands.get_programmable_pin_level())
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
+        return CommandParser.parse_laser_programmable_pin_level(response)
+
     def set_optical_power(self,power: float):
         self._send_message(LaserCommands.set_optical_power(power))
         response = self._get_message()
         CommandParser.parse_error_message(response)
         CommandParser.parse_response_successful(response)
+
+    def get_set_optical_power (self):
+        self._send_message(LaserCommands.get_set_optical_power())
+        response = self._get_message()
+        CommandParser.parse_error_message(response)
 
     def set_current(self, current: float):
         self._send_message(LaserCommands.set_current(current))
