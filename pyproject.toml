@@ -1,26 +1,29 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "matchbox2"
-version = "0.1.1"
-description = "Python library for controlling MatchBox 2 laser modules manufactured by Integrated Optics Ltd. via USB serial communication."
-authors = [
-    { name = "Integrated Optics, UAB" }
-]
+name = "matchbox2py"
+version = "0.1.2"
+description = "Official Python library for controlling Integrated Optics MatchBox2 laser modules via USB serial interface."
 readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Integrated Optics, UAB" }
+]
 
 dependencies = [
-    "pyserial>=3.5"
+  "pyserial>=3.5"
 ]
 
 [project.urls]
 Homepage = "https://integratedoptics.com/"
 Repository = "https://github.com/Integrated-optics/matchbox2py"
 
-[tool.setuptools.package-dir]
-matchbox2 = "matchbox2"
+[tool.setuptools]
+package-dir = { "" = "matchbox2" }
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["matchbox2"]
