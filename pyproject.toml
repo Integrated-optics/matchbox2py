@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "matchbox2"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python library for controlling MatchBox 2 laser modules manufactured by Integrated Optics Ltd. via USB serial communication."
 authors = [
     { name = "Integrated Optics, UAB" }
