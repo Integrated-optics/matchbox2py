@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matchbox2"
+version = "0.1.0"
+description = "Python library for controlling MatchBox 2 laser modules manufactured by Integrated Optics Ltd. via USB serial communication."
+authors = [
+    { name = "Edvinas Varanauskas" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+    "pyserial>=3.5"
+]
+
+[project.urls]
+Homepage = "https://integratedoptics.com/"
+Repository = "https://github.com/Integrated-optics/matchbox2py"
+
+[tool.setuptools]
+packages = ["matchbox2", "matchbox2.command","matchbox2.models","matchbox2.parser"]
+
+[tool.setuptools.package-dir]
+matchbox2 = "."
