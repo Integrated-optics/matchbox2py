@@ -24,14 +24,18 @@ jobs:
 
       - name: Install build tools
         run: |
-          python -m pip install --upgrade pip build twine
+          python -m pip install --upgrade pip setuptools wheel build twine
 
       - name: Build the package
         run: |
           python -m build
           twine check dist/*
 
+      - name: Show build artifacts
+        run: ls -lh dist/
+
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
         with:
           verbose: true
+          packages-dir: dist/
