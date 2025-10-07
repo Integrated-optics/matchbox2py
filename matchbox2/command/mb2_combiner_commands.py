@@ -25,11 +25,11 @@ class CombinerLaserCommands:
         return "r l"
 
     @staticmethod
-    def set_laser_off():
+    def set_disable_power():
         return "e 0"
 
     @staticmethod
-    def set_laser_on():
+    def set_enable_power():
         return "e 1"
 
     @staticmethod
@@ -85,29 +85,40 @@ class CombinerLaserCommands:
         return "r 6"
 
     @staticmethod
-    def get_mode():
-        return "r m"
+    def set_diode_current(index: int,current :int):
+        return f"Lc{index} {current}"
+
+    @staticmethod
+    def get_set_diode_currents():
+        return "Lc?"
+
+    @staticmethod
+    def set_diode_current_limit(index: int, current: int):
+        return f"Lm{index} {current}"
+
+    @staticmethod
+    def get_diode_current_limits():
+        return "Lm?"
+
+    @staticmethod
+    def get_diode_currents():
+        return "Lr?"
+
+    @staticmethod
+    def set_diode_name(index: int,name :str):
+        return f"Ln{index} {name}"
+
+    @staticmethod
+    def get_diode_names():
+        return "Ln?"
+
+    @staticmethod
+    def get_enabled_diodes():
+        return "Le"
 
     @staticmethod
     def reset_time_counter():
         return "tz"
-
-
-    @staticmethod
-    def set_max_optical_power(optical_power:int):
-        return "f 4 "+str(optical_power)
-
-    @staticmethod
-    def set_optical_power(optical_power:float):
-        return "c 4 "+str(optical_power)
-
-    @staticmethod
-    def get_set_optical_power():
-        return "c 4 ?"
-
-    @staticmethod
-    def set_current(current):
-        return "c 3 "+str(current)
 
     @staticmethod
     def function_save():

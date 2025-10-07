@@ -23,11 +23,27 @@ class MatchBox2Laser:
             self.port = port
             self.ser = serial.Serial(self.port, baudrate=self.baudrate, timeout=1)
             if self.is_laser_on_port():
-                print(f"Connected to laser on port {self.port} at baudrate {self.baudrate}")
+                self.set_access_level(2, 35488)
                 return
             raise ConnectionError(f"Connection failed: Laser not recognized on port {self.port}.")
         except serial.SerialException as e:
             print(f"Failed to connect: {e}")
+
+    def disconnect(self):
+        """Safely disconnects from the serial port."""
+        if self.ser is None:
+            return
+
+        if self.ser.is_open:
+            try:
+                self.ser.close()
+            except serial.SerialException as e:
+                print(f"Error while disconnecting from {self.port}: {e}")
+
+        self.ser = None
+        self.port = None
+        self.model_number = None
+        self.address = None
 
     def _send_message(self, message: str):
         if self.ser is None or not self.ser.is_open:
@@ -44,10 +60,6 @@ class MatchBox2Laser:
             if line:
                 response.append(line)
         return DELIMITER.join(response)
-
-    def disconnect(self):
-        if self.ser and self.ser.is_open:
-            self.ser.close()
 
     def set_access_level(self, level: int, code: int):
         self._send_message(LaserCommands.set_access_level(level, code))

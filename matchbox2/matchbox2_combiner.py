@@ -22,12 +22,28 @@ class MatchBox2CombinerLaser:
         try:
             self.port = port
             self.ser = serial.Serial(self.port, baudrate=self.baudrate, timeout=1)
-            if self.is_laser_on_port():
-                print(f"Connected to laser on port {self.port} at baudrate {self.baudrate}")
+            if self.is_laser_combiner_on_port():
+                self.set_access_level(2,35488)
                 return
             raise ConnectionError(f"Connection failed: Laser not recognized on port {self.port}.")
         except serial.SerialException as e:
             print(f"Failed to connect: {e}")
+
+    def disconnect(self):
+        """Safely disconnects from the serial port."""
+        if self.ser is None:
+            return
+
+        if self.ser.is_open:
+            try:
+                self.ser.close()
+            except serial.SerialException as e:
+                print(f"Error while disconnecting from {self.port}: {e}")
+
+        self.ser = None
+        self.port = None
+        self.model_number = None
+        self.address = None
 
     def _send_message(self, message: str):
         if self.ser is None or not self.ser.is_open:
@@ -44,10 +60,6 @@ class MatchBox2CombinerLaser:
             if line:
                 response.append(line)
         return DELIMITER.join(response)
-
-    def disconnect(self):
-        if self.ser and self.ser.is_open:
-            self.ser.close()
 
     def set_access_level(self, level: int, code: int):
         self._send_message(CombinerLaserCommands.set_access_level(level, code))
@@ -79,12 +91,25 @@ class MatchBox2CombinerLaser:
         LaserCombinerCommandParser.parse_error_message(response)
         return LaserCombinerCommandParser.parse_laser_settings(response)
 
-    def set_laser_on(self):
+    def set_enable_power(self):
         if self.get_laser_readings().power_state == "OFF":
-            self._send_message(CombinerLaserCommands.set_laser_on())
+            self._send_message(CombinerLaserCommands.set_enable_power())
             response = self._get_message()
             LaserCombinerCommandParser.parse_error_message(response)
             LaserCombinerCommandParser.parse_response_successful(response)
+
+    def set_laser_warm_up(self):
+        if self.get_laser_readings().power_state == "OFF":
+            self._send_message(CombinerLaserCommands.set_laser_warm_up_mode())
+            response = self._get_message()
+            LaserCombinerCommandParser.parse_error_message(response)
+            LaserCombinerCommandParser.parse_response_successful(response)
+
+    def set_disable_power(self):
+        self._send_message(CombinerLaserCommands.set_disable_power())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        LaserCombinerCommandParser.parse_response_successful(response)
 
     def set_diode_enable(self, index: int):
         self._send_message(CombinerLaserCommands.set_diode_enable(index))
@@ -98,18 +123,61 @@ class MatchBox2CombinerLaser:
         LaserCombinerCommandParser.parse_error_message(response)
         LaserCombinerCommandParser.parse_response_successful(response)
 
-    def set_laser_warm_up(self):
-        if self.get_laser_readings().power_state == "OFF":
-            self._send_message(CombinerLaserCommands.set_laser_warm_up_mode())
-            response = self._get_message()
-            LaserCombinerCommandParser.parse_error_message(response)
-            LaserCombinerCommandParser.parse_response_successful(response)
 
-    def set_laser_off(self):
-        self._send_message(CombinerLaserCommands.set_laser_off())
+    def get_enabled_diodes(self):
+        self._send_message(CombinerLaserCommands.get_enabled_diodes())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        return LaserCombinerCommandParser.parse_enabled_diodes(response)
+
+
+    def set_diode_current(self,index: int,current :int):
+        self._send_message(CombinerLaserCommands.set_diode_current(index,current))
         response = self._get_message()
         LaserCombinerCommandParser.parse_error_message(response)
         LaserCombinerCommandParser.parse_response_successful(response)
+
+
+    def get_set_diode_currents(self):
+        self._send_message(CombinerLaserCommands.get_set_diode_currents())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        return LaserCombinerCommandParser.parse_set_diode_currents(response)
+
+
+    def set_diode_current_limit(self, index: int, current: int):
+        self._send_message(CombinerLaserCommands.set_diode_current_limit(index, current))
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        LaserCombinerCommandParser.parse_response_successful(response)
+
+
+    def get_diode_current_limits(self):
+        self._send_message(CombinerLaserCommands.get_diode_current_limits())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        return LaserCombinerCommandParser.parse_get_diode_current_limits(response)
+
+
+    def get_diode_currents(self):
+        self._send_message(CombinerLaserCommands.get_diode_currents())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        return LaserCombinerCommandParser.parse_get_diode_currents(response)
+
+
+    def set_diode_name(self, index: int, current: str):
+        self._send_message(CombinerLaserCommands.set_diode_name(index, current))
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        LaserCombinerCommandParser.parse_response_successful(response)
+
+
+    def get_diode_names(self):
+        self._send_message(CombinerLaserCommands.get_diode_names())
+        response = self._get_message()
+        LaserCombinerCommandParser.parse_error_message(response)
+        return LaserCombinerCommandParser.parse_get_diode_names(response)
 
     def set_enable_auto_on(self):
         self._send_message(CombinerLaserCommands.set_enable_auto_on())
@@ -147,30 +215,13 @@ class MatchBox2CombinerLaser:
         LaserCombinerCommandParser.parse_error_message(response)
         return LaserCombinerCommandParser.parse_laser_programmable_pin_level(response)
 
-    def set_optical_power(self, power: float):
-        self._send_message(CombinerLaserCommands.set_optical_power(power))
-        response = self._get_message()
-        LaserCombinerCommandParser.parse_error_message(response)
-        LaserCombinerCommandParser.parse_response_successful(response)
-
-    def get_set_optical_power(self):
-        self._send_message(CombinerLaserCommands.get_set_optical_power())
-        response = self._get_message()
-        LaserCombinerCommandParser.parse_error_message(response)
-
-    def set_current(self, current: float):
-        self._send_message(CombinerLaserCommands.set_current(current))
-        response = self._get_message()
-        LaserCombinerCommandParser.parse_error_message(response)
-        LaserCombinerCommandParser.parse_response_successful(response)
-
     def set_function_save(self):
         self._send_message(CombinerLaserCommands.function_save())
         response = self._get_message()
         LaserCombinerCommandParser.parse_error_message(response)
         LaserCombinerCommandParser.parse_response_successful(response)
 
-    def is_laser_on_port(self) -> bool:
+    def is_laser_combiner_on_port(self) -> bool:
         laser_info = self.get_laser_info()
         if not laser_info:
             return False
@@ -196,7 +247,7 @@ class MatchBox2CombinerLaser:
                 if self.port is None:
                     raise ValueError("Port must be provided to connect.")
                 self.ser = serial.Serial(self.port, baudrate=self.baudrate, timeout=1)
-                if self.is_laser_on_port():
+                if self.is_laser_combiner_on_port():
                     laser_info = self.get_laser_info()
                     laser = LaserOnPort(portName=port.device, model=laser_info.model, serial=laser_info.serial_no,
                                         firmware=laser_info.firmware)

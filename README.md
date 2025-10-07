@@ -1,67 +1,107 @@
-# matchbox2py
+<p align="center">
+  <a href="https://integratedoptics.com" target="_blank">
+    <img src="https://integratedoptics.com/files/IO_logo.png" alt="Integrated Optics" width="200"/>
+  </a>
+</p>
 
-Python library for controlling Integrated Optics MatchBox2 laser modules via USB serial communication.
+<h1 align="center">Official MatchBox2 Python Library</h1>
 
----
-
-## Features
-
-- Connect and communicate with MatchBox 2 devices
-- Read device information and settings
-- Send commands and parse responses
-- Structured models for laser info, readings, and settings
 
 ---
 
-##  Installation
+## 🧩 Overview
 
-You can install the library directly from GitHub:
+**MatchBox2 Python Library** provides a simple and structured interface for controlling **Integrated Optics MatchBox2** laser modules over USB serial communication.
+
+It offers:
+- High-level API for laser operations
+- Structured models for laser info, settings, and readings
+- Built-in command parsing for MatchBox2 and Combiner lasers
+- Support for automatic device discovery
+
+---
+
+## ⚙️ Installation
+
+Install the library directly from GitHub:
 
 ```bash
-pip install git+https://github.com/Integrated-optics/matchbox2py.git@master#egg=matchbox2
+python -m pip install git+https://github.com/Integrated-optics/matchbox2py.git
 ```
 
-Alternatively, you can add this line to your `requirements.txt`:
-
-```
-git+https://github.com/Integrated-optics/matchbox2py.git@master#egg=matchbox2
-```
-
-and install all dependencies with:
+or from a local clone:
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/Integrated-optics/matchbox2py.git
+cd matchbox2py
+python -m pip install .
 ```
 
 ---
 
-## Usage Example
+## 🚀 Quickstart
+
+### MatchBox2 Laser Example
 
 ```python
-from matchbox2py.matchbox2 import MatchBox2Laser
+from matchbox2 import MatchBox2Laser
 
-# List all available connected lasers
-lasers = MatchBox2Laser().get_available_lasers()
-print("Detected lasers:", lasers)
+available_lasers = MatchBox2Laser().get_available_lasers()
 
-# Connect to the first available laser
-if lasers:
+if available_lasers:
     laser = MatchBox2Laser()
-    laser.connect("COM3")
-    # Turn the laser on
+    laser.connect(available_lasers[0].portName)
     laser.set_laser_on()
-    # Turn the laser off
+    readings = laser.get_laser_readings()
+    print(readings)
     laser.set_laser_off()
+    laser.disconnect()
+else:
+    print("No lasers detected.")
+```
+
+### MatchBox2 Laser Combiner Example
+
+```python
+from matchbox2 import MatchBox2CombinerLaser
+
+available_lasers = MatchBox2CombinerLaser().get_available_lasers()
+
+if available_lasers:
+    laser = MatchBox2CombinerLaser()
+    laser.connect(available_lasers[0].portName)
+    laser.set_enable_power()
+    readings = laser.get_laser_readings()
+    print(readings)
+
+    # Enable / disable diodes
+    for i in range(1, 5):
+        laser.set_diode_enable(i)
+    for i in range(1, 5):
+        laser.set_diode_disable(i)
+
+    laser.set_disable_power()
+    laser.disconnect()
 else:
     print("No lasers detected.")
 ```
 
 ---
-## Links
+
+## 🪪 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌐 Links
 
 - **Homepage:** [https://integratedoptics.com](https://integratedoptics.com)  
-- **Repository:** [https://github.com/Integrated-optics/matchbox2py](https://github.com/Integrated-optics/matchbox2py)
+- **Repository:** [https://github.com/Integrated-optics/matchbox2py](https://github.com/Integrated-optics/matchbox2py)  
+- **Contact:** [info@integratedoptics.com](mailto:info@integratedoptics.com)
 
+---
 
-
-
+<p align="center">
+  <i>© 2025 Integrated Optics</i>
+</p>

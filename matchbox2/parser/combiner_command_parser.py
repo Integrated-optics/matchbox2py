@@ -100,6 +100,36 @@ class LaserCombinerCommandParser:
         raise "Error parsing matchbox2 mode"
 
     @staticmethod
+    def parse_enabled_diodes(response):
+        if response is not None and "<" in response and ">" in response:
+            return [int(ch) for ch in response.replace("<", "").replace(">", "").replace(" ", "")]
+        raise "Error parsing matchbox2 enabled diodes"
+
+    @staticmethod
+    def parse_set_diode_currents(response):
+        if response is not None and "<" in response and ">" in response:
+            return [int(ch) for ch in response.replace("<", "").replace(">", "").replace(" ", "")]
+        raise "Error parsing matchbox2 set diode currents"
+
+    @staticmethod
+    def parse_get_diode_current_limits(response):
+        if response is not None and "<" in response and ">" in response:
+            return [int(ch) for ch in response.replace("<", "").replace(">", "").replace(" ", "")]
+        raise "Error parsing matchbox2 diode current limits"
+
+    @staticmethod
+    def parse_get_diode_currents(response):
+        if response is not None and "<" in response and ">" in response:
+            return [int(ch) for ch in response.replace("<", "").replace(">", "").replace(" ", "")]
+        raise "Error parsing matchbox2 diode currents"
+
+    @staticmethod
+    def parse_get_diode_names(response):
+        if response is not None and "<" in response and ">" in response:
+            return list(response.replace("<", "").replace(">", "").replace(" ", ""))
+        raise "Error parsing matchbox2 diode currents"
+
+    @staticmethod
     def parse_response_successful(response):
         if response is not None and response == "<ACK>":
             return response
@@ -121,5 +151,14 @@ class LaserCombinerCommandParser:
             raise "Laser must be enabled to execute this command"
         if response is not None and "<ERR" in response:
             raise "Unknown error"
+
+
+
+
+
+
+
+
+
 
 
