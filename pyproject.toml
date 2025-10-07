@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "matchbox2py"
-version = "0.1.0"
+version = "0.1.4"
 description = "Official Python library for controlling Integrated Optics MatchBox2 laser modules via USB serial interface."
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = "MIT"
 
 authors = [
   { name = "Integrated Optics, UAB" }
@@ -23,8 +23,4 @@ Homepage = "https://integratedoptics.com/"
 Repository = "https://github.com/Integrated-optics/matchbox2py"
 
 [tool.setuptools]
-# Aiškiai pasakyti, kad projektas naudoja automatinį paketų suradimą
 packages = ["matchbox2"]
-
-[tool.setuptools.package-dir]
-"" = "matchbox2"
