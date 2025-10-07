@@ -23,8 +23,7 @@ jobs:
           python -m pip install --upgrade pip build twine
 
       - name: Build the package
-        run: |
-          python -m build
+        run: python -m build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.9.0
