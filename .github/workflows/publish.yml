@@ -1,4 +1,4 @@
-name: Publish to PyPI
+name: Publish to PyPI (token)
 
 on:
   release:
@@ -6,12 +6,7 @@ on:
 
 jobs:
   build-n-publish:
-    name: Build and publish Python package
     runs-on: ubuntu-latest
-
-    permissions:
-      id-token: write  # required for Trusted Publishers
-      contents: read
 
     steps:
       - name: Checkout code
@@ -26,16 +21,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel build twine
 
-      - name: Build the package
+      - name: Build package
         run: |
           python -m build
           twine check dist/*
+          ls -lh dist/
 
-      - name: Show build artifacts
-        run: ls -lh dist/
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.12.2
-        with:
-          verbose: true
-          packages-dir: dist/
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python -m twine upload dist/*
