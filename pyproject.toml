@@ -26,4 +26,4 @@ Repository = "https://github.com/Integrated-optics/matchbox2py"
 packages = ["matchbox2"]
 
 [tool.setuptools.package-dir]
-"" = "matchbox2"
+"" = "."
