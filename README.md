@@ -22,22 +22,17 @@ It offers:
 ---
 
 ## ⚙️ Installation
+Install the library directly from PyPI:
+
+```bash
+pip install matchbox2py
+```
 
 Install the library directly from GitHub:
 
 ```bash
 python -m pip install git+https://github.com/Integrated-optics/matchbox2py.git
 ```
-
-or from a local clone:
-
-```bash
-git clone https://github.com/Integrated-optics/matchbox2py.git
-cd matchbox2py
-python -m pip install .
-```
-
----
 
 ## 🚀 Quickstart
 
