@@ -22,8 +22,6 @@ dependencies = [
 Homepage = "https://integratedoptics.com/"
 Repository = "https://github.com/Integrated-optics/matchbox2py"
 
-[tool.setuptools]
-packages = ["matchbox2"]
-
-[tool.setuptools.package-dir]
-"" = "."
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["matchbox2*"]
