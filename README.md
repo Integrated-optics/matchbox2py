@@ -38,7 +38,7 @@ pip install -r requirements.txt
 ## Usage Example
 
 ```python
-from matchbox2 import MatchBox2Laser
+from matchbox2py.matchbox2 import MatchBox2Laser
 
 # List all available connected lasers
 lasers = MatchBox2Laser().get_available_lasers()
@@ -50,7 +50,7 @@ if lasers:
     laser.connect("COM3")
     # Turn the laser on
     laser.set_laser_on()
-     # Turn the laser off
+    # Turn the laser off
     laser.set_laser_off()
 else:
     print("No lasers detected.")
